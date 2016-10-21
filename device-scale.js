@@ -21,11 +21,11 @@ function ToggleDeviceUnits() {
     switch (currentUnits) {
         case "lbs":
             player.SetVar("deviceUnits", "kgs");
-            weight = (parseFloat(weight) + parseFloat(player.GetVar("tareWeight"))) * 0.45359237;
-            SetDisplayValue(weight);
+            SetDisplayValue(player.GetVar("weightKgs"));
             break;
         case "kgs":
             player.SetVar("deviceUnits", "lbs");
+            SetDisplayValue(player.GetVar("weightLbs"));
             break;
         default:
             player.SetVar("deviceUnits", "x_x");
@@ -35,29 +35,43 @@ function ToggleDeviceUnits() {
 function Weigh() {
     // var temp = GetWeight() + player.GetVar("tareWeight");
     var temp = GetWeight();
-    if (temp < 0) {
-        temp = parseFloat(temp) + (player.GetVar("tareWeight") * -1);
-    } else {
-         temp = parseFloat(temp) + (player.GetVar("tareWeight"));
+    var currentUnits = player.GetVar("deviceUnits");
+    switch (currentUnits) {
+        case "lbs":
+        SetDisplayValue(player.GetVar("weightLbs"));
+        break;
+        case "kgs":
+        SetDisplayValue(player.GetVar("weightKgs"));
+        break;
+        default:
+        player.SetVar("deviceUnits", "x_x");
     }
-    SetDisplayValue(temp);
+
+    // if (temp < 0) {
+    //     temp = parseFloat(temp) + (player.GetVar("tareWeight") * -1);
+    // } else {
+    //      temp = parseFloat(temp) + (player.GetVar("tareWeight"));
+    // }
+    // SetDisplayValue(temp);
     //player.SetVar("displayWeight", temp);
 
     return temp;
 }
 
 function GetWeight() {
-    var currentUnits = player.GetVar("deviceUnits");
+    // var currentUnits = player.GetVar("deviceUnits");
     var containerWeight = parseFloat(player.GetVar("containerState")) * parseFloat(player.GetVar("containerWeight"));
     var lrgBMC = parseFloat(player.GetVar("lrgBMCState")) * parseFloat(player.GetVar("lrgBMC"));
     var medBMC = parseFloat(player.GetVar("medBMCState")) * parseFloat(player.GetVar("medBMC"));
     var smBMC = parseFloat(player.GetVar("smBMCState")) * parseFloat(player.GetVar("smBMC"));
-    var weight = parseFloat(containerWeight + lrgBMC + medBMC + smBMC);
 
-    // if (currentUnits === "kgs") {
-    //     weight = (parseFloat(weight) + parseFloat(player.GetVar("tareWeight"))) * 0.45359237;
-    // }
-     return weight;
+    var weightLbs = parseFloat(containerWeight + lrgBMC + medBMC + smBMC);
+    var weightKgs = weightLbs * 0.45359237;
+
+    player.SetVar("weightLbs", weightLbs);
+    player.SetVar("weightKgs", weightKgs);
+
+    // return weight;
 }
 
 function tempDrop() {
@@ -72,5 +86,5 @@ function setTare() {
 
 function SetDisplayValue(value) {
     player.SetVar("displayWeight", value);
-    return value;
+    // return value;
 }

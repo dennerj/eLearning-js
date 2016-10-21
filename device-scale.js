@@ -5,10 +5,10 @@ function DevicePower(state) {
     devicePower = player.GetVar("devicePower");
     switch (devicePower) {
         case "on":
-            SetDeviceUnits("kgs");
+            // SetDeviceUnits("kgs");
             break;
         case "off":
-            alert("Device is Off");
+            // alert("Device is Off");
             break;
         default:
             alert("x_x");
@@ -17,15 +17,15 @@ function DevicePower(state) {
 
 function ToggleDeviceUnits() {
     var currentUnits = player.GetVar("deviceUnits");
-    var weight = GetWeight();
+    // GetWeight();
     switch (currentUnits) {
         case "lbs":
             player.SetVar("deviceUnits", "kgs");
-            SetDisplayValue(player.GetVar("weightKgs"));
+            SetDisplayValue(player.GetVar("netWeightKgs"));
             break;
         case "kgs":
             player.SetVar("deviceUnits", "lbs");
-            SetDisplayValue(player.GetVar("weightLbs"));
+            SetDisplayValue(player.GetVar("netWeightLbs"));
             break;
         default:
             player.SetVar("deviceUnits", "x_x");
@@ -34,28 +34,25 @@ function ToggleDeviceUnits() {
 
 function Weigh() {
     // var temp = GetWeight() + player.GetVar("tareWeight");
-    var temp = GetWeight();
+    GetWeight();
+    // SetTare();
+    player.SetVar("netWeightLbs", parseFloat(player.GetVar("weightLbs")) + parseFloat(player.GetVar("tareLbs")));
+    player.SetVar("netWeightKgs", parseFloat(player.GetVar("weightKgs")) + parseFloat(player.GetVar("tareKgs")));
+    // var netWeightKgs = player.GetVar("weightKgs") + player.GetVar("tareKgs");
+    // var temp = GetWeight();
     var currentUnits = player.GetVar("deviceUnits");
     switch (currentUnits) {
         case "lbs":
-        SetDisplayValue(player.GetVar("weightLbs"));
+        SetDisplayValue(player.GetVar("netWeightLbs"));
         break;
         case "kgs":
-        SetDisplayValue(player.GetVar("weightKgs"));
+        SetDisplayValue(player.GetVar("netWeightKgs"));
         break;
         default:
         player.SetVar("deviceUnits", "x_x");
     }
 
-    // if (temp < 0) {
-    //     temp = parseFloat(temp) + (player.GetVar("tareWeight") * -1);
-    // } else {
-    //      temp = parseFloat(temp) + (player.GetVar("tareWeight"));
-    // }
-    // SetDisplayValue(temp);
-    //player.SetVar("displayWeight", temp);
-
-    return temp;
+    // return temp;
 }
 
 function GetWeight() {
@@ -78,9 +75,13 @@ function tempDrop() {
     Weigh();
 }
 
-function setTare() {
-    var tareWeight = player.SetVar("tareWeight", parseFloat(GetWeight()) * -1);
-    SetDisplayValue(player.GetVar("tareWeight") + parseFloat(GetWeight()));
+function SetTare() {
+    // var tareLbs = player.GetVar("weightLbs") * - 1;
+    // var tareKgs = player.GetVar("weightKgs") * - 1;
+    player.SetVar("tareKgs", parseFloat(player.GetVar("weightKgs")) * -1);
+    player.SetVar("tareLbs", parseFloat(player.GetVar("weightLbs")) * -1);
+    Weigh();
+    // SetDisplayValue(player.GetVar("tareWeight") + parseFloat(GetWeight()));
     // player.SetVar("displayWeight", tareWeight);
 }
 
@@ -88,3 +89,4 @@ function SetDisplayValue(value) {
     player.SetVar("displayWeight", value);
     // return value;
 }
+

@@ -1,14 +1,16 @@
 
-function DevicePower(state) {
+function DevicePower() {
     player = GetPlayer();
-    var devicePower = player.SetVar("devicePower", state);
-    devicePower = player.GetVar("devicePower");
+    //var devicePower = player.SetVar("devicePower", state);
+    var devicePower = player.GetVar("devicePower");
     switch (devicePower) {
-        case "on":
-            // SetDeviceUnits("kgs");
-            break;
         case "off":
+			player.SetVar("devicePower" , "on");
             // alert("Device is Off");
+			break;
+		case "on":
+			player.SetVar("devicePower" , "off");
+            // SetDeviceUnits("kgs");
             break;
         default:
             alert("x_x");
@@ -74,4 +76,3 @@ function SetTare() {
 function SetDisplayValue(value) {
     player.SetVar("displayWeight", value);
 }
-
